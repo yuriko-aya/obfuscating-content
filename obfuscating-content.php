@@ -10,8 +10,6 @@ License:      GPL2
 License URI:  https://www.gnu.org/licenses/gpl-2.0.html
 */
 
-$timelaps = time()-get_the_time('U',$post->ID);
-
 add_action('get_header','make_encrypt', 10);
 
 function make_encrypt() {
