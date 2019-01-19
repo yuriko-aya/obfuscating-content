@@ -9,8 +9,6 @@ function obfus_content() {
     if ( !current_user_can('manage_options') ) {
         wp_die( __('You do not have persmission'));
     } 
-    $ads1 = get_option('obfuscate_ads1');
-    $ads2 = get_option('obfuscate_ads2');
     ?>
     <div class="wrap">
         <h1>Obfuscating Content Options</h1>
@@ -24,6 +22,8 @@ function obfus_content() {
         update_option('obfuscate_ads2', $new_ads2);
         echo '<div class="updated notice"><p>Ads saved</p></div>';
     }
+    $ads1 = stripslashes(get_option('obfuscate_ads1'));
+    $ads2 = stripslashes(get_option('obfuscate_ads2'));
 ?>
     <div><p>Ads taht you want to put (optional)</p></div>
     <form name="obfus-options" method="post" action="">
