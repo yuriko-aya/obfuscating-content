@@ -10,6 +10,8 @@ License:      GPL2
 License URI:  https://www.gnu.org/licenses/gpl-2.0.html
 */
 
+require( dirname(__FILE__) . '/' . 'admin/obfuscate-menu.php');
+
 $timelaps = time()-get_post_time('U', true, $post->ID);
 
 add_action('get_header','make_encrypt', 10);
@@ -64,8 +66,8 @@ function encrypt_engine($content) {
 add_filter('the_content', 'start_encrypt',10);
 
 function start_encrypt($content) {
-    $ads = '';
-    $ads2 = '';
+    $ads = stripslashes(get_option('obfuscate_ads1'));
+    $ads2 = stripslashes(get_option('obfuscate_ads2'));
     
     if(is_single()){
         $next_post = get_next_post();
