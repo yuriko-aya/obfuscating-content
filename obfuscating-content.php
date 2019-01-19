@@ -2,27 +2,30 @@
 /*
 Plugin Name:  Obfuscating Content
 Plugin URI:   https://aya.sanusi.id
-Description:  Obfuscate the content!
-Version:      20190116
+Description:  Obfuscate the content so only human can read!
+Version:      20190119
 Author:       Yuriko Aya
 Author URI:   https://aya.sanusi.id
 License:      GPL2
 License URI:  https://www.gnu.org/licenses/gpl-2.0.html
 */
 
+$timelaps = time()-get_post_time('U', true, $post->ID);
+
 add_action('get_header','make_encrypt', 10);
 
 function make_encrypt() {
+    $the_date = date("Ynj.G.i");
     // add the css
     wp_enqueue_script('jquery');
-    wp_enqueue_script('encrypt_contents', plugins_url( 'js/mxl.js', __FILE__ ));
+    wp_enqueue_script('encrypt_contents', plugins_url( 'js/mxl.js', __FILE__ ), array(), $the_date);
 }
 
 add_action('get_footer', 'check_the_encryption',100);
 function check_the_encryption() {
     if (is_single()) {
         $next_post = get_next_post();
-        $timelaps = time()-get_the_time('U',$post->ID);
+        $timelaps = time()-get_post_time('U', true, $post->ID);
         //if ((!$next_post || empty($next_post)) && $timelaps <= 86400) {
         if ($timelaps <= 86400) {
                 ?>
@@ -66,7 +69,7 @@ function start_encrypt($content) {
     
     if(is_single()){
         $next_post = get_next_post();
-        $timelaps = time()-get_the_time('U',$post->ID);
+        $timelaps = time()-get_post_time('U', true, $post->ID);
         //if ((!$next_post || empty($next_post)) && $timelaps <= 86400) {
         if ($timelaps <= 86400) {
             $dom = new DOMDocument;
@@ -116,7 +119,7 @@ function learn_the_language($content) {
     //make sure it was single post page
     if(is_single()){
         $next_post = get_next_post();
-        $timelaps = time()-get_the_time('U',$post->ID);
+        $timelaps = time()-get_post_time('U', true, $post->ID);
         //if ((!$next_post || empty($next_post)) && $timelaps <= 86400) {
         if ($timelaps <= 86400) {
             $toggle_button = '
