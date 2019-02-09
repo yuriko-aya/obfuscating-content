@@ -99,7 +99,7 @@ function start_encrypt($content) {
                 } else {
                     $p_content = encrypt_engine($orig_content);
                 }
-                if ($tag_name == 'p' or $tag_name == 'hr' or $tag_name == 'img' or $tag_name == 'pre') {
+                if ($tag_name == 'p' or $tag_name == 'hr' or $tag_name == 'img' or $tag_name == 'pre' or $tag_name == 'h1' or $tag_name == 'h2' or $tag_name == 'h3') {
                     if ($tag_name != 'br' or $tag_name != 'hr' or $tag_name != 'img') {
                         $result .= $tags.$p_content.$close_tags;
                     } else {
