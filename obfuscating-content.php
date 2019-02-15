@@ -126,7 +126,7 @@ function learn_the_language($content) {
         if ($timelaps <= 86400) {
             $toggle_button = '
             <center class="switches">
-            <div>If you see non English language, click button below to let your device learn the language</div>
+            <div>If you see non English language, make sure you read it on AYA Translation site and click button below to let your device learn the language</div>
             <button onclick="engage_the_encryption()">Learn!</button>
             <hr>
             </center>';
