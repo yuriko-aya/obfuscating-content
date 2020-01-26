@@ -4,25 +4,6 @@ var double_consonant = consonant.concat(consonant);
 var double_vocals = vocals.concat(vocals);
 var encrypted_status = localStorage.getItem("encrypted");
 
-function set_encrypted_status(status) {
-    localStorage.setItem("encrypted",status);
-}
-
-function check_encryption_status() {
-    if (encrypted_status === 'no') {
-        start_decrypt();
-    }
-}
-
-function engage_the_encryption() {
-    var encrypted_status = localStorage.getItem("encrypted");
-    if (encrypted_status === 'no') {
-        alert("Your computer already learn the language");
-    } else {
-        start_decrypt()
-    }
-}
-
 function start_decrypt() {
         var content_area = document.getElementsByClassName('entry-content')[0];
         var paragraphs = content_area.getElementsByTagName("p");
@@ -31,7 +12,6 @@ function start_decrypt() {
             content_encrypt = decrypt_content(para_content);
             paragraphs[i].textContent=content_encrypt;
         }
-        set_encrypted_status('no');  
 }
 
 function decrypt_content(contents) {
@@ -50,3 +30,7 @@ function decrypt_content(contents) {
     }
     return results;
 }
+
+jQuery(document).ready(function($){
+    start_decrypt()
+})

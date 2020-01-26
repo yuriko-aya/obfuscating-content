@@ -23,22 +23,6 @@ function make_encrypt() {
     wp_enqueue_script('encrypt_contents', plugins_url( 'js/mxl.js', __FILE__ ), array(), $the_date);
 }
 
-add_action('get_footer', 'check_the_encryption',100);
-function check_the_encryption() {
-    if (is_single()) {
-        $next_post = get_next_post();
-        $timelaps = time()-get_post_time('U', true, $post->ID);
-        //if ((!$next_post || empty($next_post)) && $timelaps <= 86400) {
-        if ($timelaps <= 86400) {
-                ?>
-            <script>
-                check_encryption_status();
-            </script>
-            <?php 
-        }
-    }
-}
-
 function encrypt_engine($content) {
     $consonant = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z'];
     $vocals = ['a', 'i', 'u', 'e', 'o',];
@@ -72,68 +56,40 @@ function start_encrypt($content) {
     if(is_single()){
         $next_post = get_next_post();
         $timelaps = time()-get_post_time('U', true, $post->ID);
-        //if ((!$next_post || empty($next_post)) && $timelaps <= 86400) {
-        if ($timelaps <= 86400) {
-            $dom = new DOMDocument;
-            $escape_content = mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8');
-            $dom->loadHTML($escape_content);
-            $result = '';
-            $paragraps = $dom->getElementsByTagName('*');
-            $para_length = $paragraps->length;
-            for ($i = 0; $i < $para_length; $i++) {
-                $style = $paragraps->item($i)->getAttribute('style');
-                $orig_content = $paragraps->item($i)->nodeValue;
-                $tag_name = $paragraps->item($i)->tagName;
-                $int_middle = intdiv($para_length,2);
-                if ($i == $int_middle) {
-                    $result .= $ads2;
-                }
-                if (!empty($style)) {
-                    $tags = '<'.$tag_name.' style="'.$style.'">';
+        $dom = new DOMDocument;
+        $escape_content = mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8');
+        $dom->loadHTML($escape_content);
+        $result = '';
+        $paragraps = $dom->getElementsByTagName('*');
+        $para_length = $paragraps->length;
+        for ($i = 0; $i < $para_length; $i++) {
+            $style = $paragraps->item($i)->getAttribute('style');
+            $orig_content = $paragraps->item($i)->nodeValue;
+            $tag_name = $paragraps->item($i)->tagName;
+            $int_middle = intdiv($para_length,2);
+            if ($i == $int_middle) {
+                $result .= $ads2;
+            }
+            if (!empty($style)) {
+                $tags = '<'.$tag_name.' style="'.$style.'">';
+            } else {
+                $tags = '<'.$tag_name.'>';
+            }
+            $close_tags = '</'.$tag_name.'>';
+            if ($tag_name == 'pre') {
+                $p_content = $orig_content;
+            } else {
+                $p_content = encrypt_engine($orig_content);
+            }
+            if ($tag_name == 'p' or $tag_name == 'hr' or $tag_name == 'img' or $tag_name == 'pre' or $tag_name == 'h1' or $tag_name == 'h2' or $tag_name == 'h3') {
+                if ($tag_name != 'br' or $tag_name != 'hr' or $tag_name != 'img') {
+                    $result .= $tags.$p_content.$close_tags;
                 } else {
-                    $tags = '<'.$tag_name.'>';
-                }
-                $close_tags = '</'.$tag_name.'>';
-                if ($tag_name == 'pre') {
-                    $p_content = $orig_content;
-                } else {
-                    $p_content = encrypt_engine($orig_content);
-                }
-                if ($tag_name == 'p' or $tag_name == 'hr' or $tag_name == 'img' or $tag_name == 'pre' or $tag_name == 'h1' or $tag_name == 'h2' or $tag_name == 'h3') {
-                    if ($tag_name != 'br' or $tag_name != 'hr' or $tag_name != 'img') {
-                        $result .= $tags.$p_content.$close_tags;
-                    } else {
-                        $result .= $tags;
-                    }
+                    $result .= $tags;
                 }
             }
-            return $ads.$result.$ads;
-        } else {
-            return $content;
         }
-    } else {
-        return $content;
-    }
-}
-
-add_action('the_content','learn_the_language',10);
-function learn_the_language($content) {
-    //make sure it was single post page
-    if(is_single()){
-        $next_post = get_next_post();
-        $timelaps = time()-get_post_time('U', true, $post->ID);
-        //if ((!$next_post || empty($next_post)) && $timelaps <= 86400) {
-        if ($timelaps <= 86400) {
-            $toggle_button = '
-            <center class="switches">
-            <div>If you see non English language, make sure you read it on AYA Translation site and click button below to let your device learn the language</div>
-            <button onclick="engage_the_encryption()">Learn!</button>
-            <hr>
-            </center>';
-            return $toggle_button.$content;
-        } else {
-            return $content;
-        }
+        return $ads.$result.$ads;
     } else {
         return $content;
     }
