@@ -6,7 +6,7 @@ var encrypted_status = localStorage.getItem("encrypted");
 
 function start_decrypt() {
         var content_area = document.getElementsByClassName('entry-content')[0];
-        var paragraphs = content_area.getElementsByTagName("p");
+        var paragraphs = content_area.querySelectorAll("p, h1");
         for (var i = 0; i < paragraphs.length; i++) {
             para_content = paragraphs[i].textContent;
             content_encrypt = decrypt_content(para_content);
