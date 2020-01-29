@@ -8,7 +8,7 @@ function obfuscating_menu() {
 function obfus_content() {
     if ( !current_user_can('manage_options') ) {
         wp_die( __('You do not have persmission'));
-    } 
+    }
     ?>
     <div class="wrap">
         <h1>Obfuscating Content Options</h1>

@@ -62,11 +62,10 @@ add_filter('the_content', 'start_encrypt',10);
 
 function start_encrypt($content) {
     $ads = stripslashes(get_option('obfuscate_ads1'));
-    $ads2 = stripslashes(get_option('obfuscate_ads2'));
 
     if(is_single()){
         $result = encrypt_engine($content);
-        return '<encrypted>'.$result.'</encrypted>';
+        return '<encrypted>'.$result.'</encrypted>'.$ads;
     } else {
         return $content;
     }
