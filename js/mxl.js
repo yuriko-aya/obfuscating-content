@@ -2,16 +2,13 @@ var consonant = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q'
 var vocals = ['a', 'i', 'u', 'e', 'o',];
 var double_consonant = consonant.concat(consonant);
 var double_vocals = vocals.concat(vocals);
-var encrypted_status = localStorage.getItem("encrypted");
 
 function start_decrypt() {
-        var content_area = document.getElementsByClassName('entry-content')[0];
-        var paragraphs = content_area.querySelectorAll("p, h1");
-        for (var i = 0; i < paragraphs.length; i++) {
-            para_content = paragraphs[i].textContent;
-            content_encrypt = decrypt_content(para_content);
-            paragraphs[i].textContent=content_encrypt;
-        }
+        var content_area = document.getElementsByTagName("encrypted");
+        var encrypted_content = content_area[0].innerHTML
+        var encrypt_parsed = encrypted_content.replace(/&amp;/g, '&')
+        var decrypted_content = decrypt_content(encrypt_parsed)
+        content_area[0].innerHTML = decrypted_content
 }
 
 function decrypt_content(contents) {
@@ -28,9 +25,12 @@ function decrypt_content(contents) {
             results += index_now;
         }
     }
-    return results;
+    result = results.replace(/&fskg;/g, "&nbsp;")
+    return result
 }
 
-jQuery(document).ready(function($){
-    start_decrypt()
-})
+function start_decryption() {
+    jQuery(document).ready(function($){
+        start_decrypt()
+    })
+}

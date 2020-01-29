@@ -43,53 +43,29 @@ function encrypt_engine($content) {
             } else {
                     $result .= $index_now;
             }
-    }    
+    }
     return $result;
+}
+
+add_action('get_footer', 'check_the_encryption',100);
+function check_the_encryption() {
+    if (is_single()) {
+    ?>
+        <script>
+            start_decryption();
+        </script>
+    <?php
+    }
 }
 
 add_filter('the_content', 'start_encrypt',10);
 
 function start_encrypt($content) {
     $ads = stripslashes(get_option('obfuscate_ads1'));
-    $ads2 = stripslashes(get_option('obfuscate_ads2'));
-    
+
     if(is_single()){
-        $next_post = get_next_post();
-        $timelaps = time()-get_post_time('U', true, $post->ID);
-        $dom = new DOMDocument;
-        $escape_content = mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8');
-        $dom->loadHTML($escape_content);
-        $result = '';
-        $paragraps = $dom->getElementsByTagName('*');
-        $para_length = $paragraps->length;
-        for ($i = 0; $i < $para_length; $i++) {
-            $style = $paragraps->item($i)->getAttribute('style');
-            $orig_content = $paragraps->item($i)->nodeValue;
-            $tag_name = $paragraps->item($i)->tagName;
-            $int_middle = intdiv($para_length,2);
-            if ($i == $int_middle) {
-                $result .= $ads2;
-            }
-            if (!empty($style)) {
-                $tags = '<'.$tag_name.' style="'.$style.'">';
-            } else {
-                $tags = '<'.$tag_name.'>';
-            }
-            $close_tags = '</'.$tag_name.'>';
-            if ($tag_name == 'pre') {
-                $p_content = $orig_content;
-            } else {
-                $p_content = encrypt_engine($orig_content);
-            }
-            if ($tag_name == 'p' or $tag_name == 'hr' or $tag_name == 'img' or $tag_name == 'pre' or $tag_name == 'h1' or $tag_name == 'h2' or $tag_name == 'h3') {
-                if ($tag_name != 'br' or $tag_name != 'hr' or $tag_name != 'img') {
-                    $result .= $tags.$p_content.$close_tags;
-                } else {
-                    $result .= $tags;
-                }
-            }
-        }
-        return $ads.$result.$ads;
+        $result = encrypt_engine($content);
+        return '<encrypted>'.$result.'</encrypted>'.$ads;
     } else {
         return $content;
     }
