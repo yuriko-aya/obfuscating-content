@@ -3,7 +3,7 @@
 Plugin Name:  Obfuscating Content
 Plugin URI:   https://aya.sanusi.id
 Description:  Obfuscate the content so only human can read!
-Version:      20190119
+Version:      20210222
 Author:       Yuriko Aya
 Author URI:   https://aya.sanusi.id
 License:      GPL2
@@ -24,6 +24,7 @@ function make_encrypt() {
 }
 
 function encrypt_engine($content) {
+    $ads = stripslashes(get_option('obfuscate_ads2'));
     $consonant = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z'];
     $vocals = ['a', 'i', 'u', 'e', 'o',];
     $double_consonant = array_fill(0, 2, $consonant);
@@ -34,8 +35,12 @@ function encrypt_engine($content) {
     $text = $content;
     $splitted_text = str_split($text);
     $text_length = count($splitted_text);
+    $int_middle = intdiv($text_length, 2);
     for ($i = 0; $i < $text_length; $i++) {
             $index_now = $splitted_text[$i];
+            if ($i == $int_middle) {
+                $result .= $ads2;
+            }
             if (in_array($index_now,$consonant)) {
                     $result .= $real_consonant[array_search($index_now,$consonant)+7];
             } elseif (in_array($index_now,$vocals)) {
@@ -65,7 +70,7 @@ function start_encrypt($content) {
 
     if(is_single()){
         $result = encrypt_engine($content);
-        return '<encrypted>'.$result.'</encrypted>'.$ads;
+        return $ads.'<encrypted>'.$result.'</encrypted>'.$ads;
     } else {
         return $content;
     }
