@@ -23,7 +23,7 @@ function obfus_content() {
         echo '<div class="updated notice"><p>Ads saved</p></div>';
     }
     $ads1 = stripslashes(get_option('obfuscate_ads1'));
-    $ads1 = stripslashes(get_option('obfuscate_ads2'));
+    $ads2 = stripslashes(get_option('obfuscate_ads2'));
 ?>
     <div><p>Ads that you want to put (optional)</p></div>
     <form name="obfus-options" method="post" action="">
